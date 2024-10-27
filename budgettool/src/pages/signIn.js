@@ -17,7 +17,7 @@ const SignIn = () => {
     });
   }, [loginWithRedirect]);
 
-  return "null"; // No UI needed since redirect occurs immediately
+  return <div>Loading...</div>; // No UI needed since redirect occurs immediately
 };
 
 export default SignIn;

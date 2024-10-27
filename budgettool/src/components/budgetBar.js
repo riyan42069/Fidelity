@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { Navbar, Nav, Button, Container } from "react-bootstrap";
-import { FaBars, FaTimes } from "react-icons/fa"; // Import icons for bars and cross
+import { FaBars, FaTimes } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react"; // Import Auth0 hook
 
 const BudgetBar = () => {
-  // State to track if the menu is expanded or collapsed
+  const { isAuthenticated, logout } = useAuth0(); // Destructure Auth0 properties
   const [isNavCollapsed, setIsNavCollapsed] = useState(true);
 
-  // Function to toggle the menu collapse state
   const handleToggleClick = () => {
     setIsNavCollapsed(!isNavCollapsed);
   };
@@ -18,15 +18,13 @@ const BudgetBar = () => {
         expand="lg"
         className="bg-primary text-light p-3 position-sticky top-0"
         style={{ zIndex: 1000 }}
-        expanded={!isNavCollapsed} // Control expansion state
+        expanded={!isNavCollapsed}
       >
         <Container fluid>
-          {/* Brand name */}
           <Navbar.Brand className="text-light me-5" href="#home">
             Budget Tool
           </Navbar.Brand>
 
-          {/* Toggle button for mobile view */}
           <Button
             variant="outline-light"
             className="border-0 d-lg-none"
@@ -40,7 +38,6 @@ const BudgetBar = () => {
             {isNavCollapsed ? <FaBars size={25} /> : <FaTimes size={25} />}
           </Button>
 
-          {/* Collapsible part */}
           <Navbar.Collapse id="navbar-nav">
             <Nav className="me-auto">
               <Nav.Link
@@ -66,18 +63,28 @@ const BudgetBar = () => {
               </Nav.Link>
             </Nav>
 
-            {/* Buttons */}
+            {/* Conditional buttons */}
             <div className="d-flex">
               <Link to="/signIn">
                 <Button variant="outline-light" className="me-2">
                   Login
                 </Button>
               </Link>
-              <Link to="/register">
-                <Button variant="outline-light" className="ms-2">
-                  Register
+              {isAuthenticated ? (
+                <Button
+                  variant="outline-light"
+                  className="ms-2"
+                  onClick={() => logout({ returnTo: window.location.origin })}
+                >
+                  Sign Out
                 </Button>
-              </Link>
+              ) : (
+                <Link to="/register">
+                  <Button variant="outline-light" className="ms-2">
+                    Register
+                  </Button>
+                </Link>
+              )}
             </div>
           </Navbar.Collapse>
         </Container>

@@ -10,6 +10,7 @@ import SignIn from "./pages/signIn";
 import Register from "./pages/register";
 import NotFound from "./pages/404";
 import Budget from "./pages/budget";
+import ForgotPassword from "./pages/forgot";
 
 function ProtectedRoute({ element, redirectTo = "/signIn" }) {
   const { isAuthenticated, isLoading } = useAuth0();
@@ -29,6 +30,7 @@ function App() {
           {/* Public routes */}
           <Route path="/signIn" element={<SignIn />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/forgot" element={<ForgotPassword />} />
 
           {/* Protected route for Budget page */}
           <Route path="/" element={<ProtectedRoute element={<Budget />} />} />
