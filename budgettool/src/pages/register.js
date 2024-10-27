@@ -12,7 +12,7 @@ const Register = () => {
     <Container
       fluid
       className="d-flex align-items-center justify-content-center mb-5 mt-5"
-      style={{ width: "100%" }}
+      style={{ width: "100%", backgroundColor: "#009639"}}
     >
       <Row className="w-100">
         <Col className="d-md-flex align-items-center justify-content-center h-auto">
