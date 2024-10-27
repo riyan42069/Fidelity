@@ -8,7 +8,7 @@ import { PieChart, Pie, Tooltip, Cell } from "recharts";
 const Budget = () => {
   return (
     <>
-      <NavigationBar /> {/* Navigation Bar */}
+      <NavigationBar />
       <div className="landing-content">
         <ImageSection />
         <Tagline />
@@ -39,10 +39,7 @@ const Tagline = () => {
       <h2 className="d-flex justify-content-center mt-4">
         Start Budgeting Smartly!
       </h2>
-      {/* Buttons placed after the image */}
-      <div className="d-flex justify-content-center mt-4">
-        <GetStarted />
-      </div>
+      <div className="d-flex justify-content-center"></div>
       <br />
       <PieChartSection />
     </div>
@@ -64,23 +61,52 @@ const PieChartSection = () => {
     setActiveIndex(index);
   };
 
+  const total = data.reduce((sum, entry) => sum + entry.students, 0);
+
   return (
-    <PieChart width={700} height={700}>
-      <Pie
-        activeIndex={activeIndex}
-        data={data}
-        dataKey="students"
-        outerRadius={250}
-        fill="green"
-        onMouseEnter={onPieEnter}
-        style={{ cursor: "pointer", outline: "none" }}
-      >
+    <div className="d-flex align-items-center justify-content-center">
+      {/* Pie Chart */}
+      <PieChart width={400} height={400}>
+        <Pie
+          activeIndex={activeIndex}
+          data={data}
+          dataKey="students"
+          outerRadius={150}
+          fill="green"
+          onMouseEnter={onPieEnter}
+          style={{ cursor: "pointer", outline: "none" }}
+        >
+          {data.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+          ))}
+        </Pie>
+        <Tooltip />
+      </PieChart>
+
+      {/* Legend */}
+      <div className="ms-4">
+        <h5>Categories</h5>
         {data.map((entry, index) => (
-          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+          <div key={index} className="d-flex align-items-center mb-2">
+            <div
+              style={{
+                width: "15px",
+                height: "15px",
+                backgroundColor: COLORS[index % COLORS.length],
+                marginRight: "10px",
+              }}
+            ></div>
+            <span>
+              {entry.name}: {entry.students}
+            </span>
+          </div>
         ))}
-      </Pie>
-      <Tooltip />
-    </PieChart>
+        {/* Display Total */}
+        <div className="mt-4">
+          <strong>Total: {total}</strong>
+        </div>
+      </div>
+    </div>
   );
 };
 
@@ -96,21 +122,6 @@ const ExploreFeature = () => {
         shopping smarter.
       </p>
     </div>
-  );
-};
-
-const GetStarted = () => {
-  // Button for Get Started
-  return (
-    <Link to="/home">
-      <Button
-        style={{ color: "white" }}
-        className="mx-2 btn btn-primary custom-btn mt-4"
-        variant="outline-dark"
-      >
-        Goals
-      </Button>
-    </Link>
   );
 };
 
