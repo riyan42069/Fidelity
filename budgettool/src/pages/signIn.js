@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Form, Button, Card } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
+import { FaGoogle } from "react-icons/fa"; // Import Google icon
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -13,11 +14,16 @@ const SignIn = () => {
     navigate("/forgotPassword");
   };
 
+  // Placeholder function for Google Sign-In
+  const onGoogleSignIn = () => {
+    alert("Google Sign-In triggered!"); // Mock alert for demonstration
+  };
+
   return (
     <Container
       fluid
       className="vh-auto d-flex align-items-center justify-content-center mb-5 mt-5"
-      style={{ width: "100%" }}
+      style={{ width: "100%", backgroundColor: "#009639"}}
     >
       <Row className="w-100">
         <Col className="d-flex align-items-center justify-content-center h-auto">
@@ -27,6 +33,7 @@ const SignIn = () => {
           >
             <Card.Body className="d-flex flex-column justify-content-center">
               <h2 className="text-center mb-4">Sign In</h2>
+
               <Form className="w-100">
                 {/* Email field */}
                 <Form.Group controlId="formEmail" className="mb-4">
@@ -71,7 +78,7 @@ const SignIn = () => {
                   <p>
                     Forgot Password? Click{" "}
                     <span
-                      style={{ cursor: "pointer", color: "blue" }}
+                      style={{ cursor: "pointer", color: "green" }}
                       onClick={handleReset}
                     >
                       <b>here</b>
@@ -88,6 +95,17 @@ const SignIn = () => {
                   size="lg"
                 >
                   Sign in
+                </Button>
+
+                {/* Sign In with Google button */}
+                <Button
+                  variant="outline-secondary"
+                  className="w-100 mt-3 py-3 d-flex align-items-center justify-content-center"
+                  size="lg"
+                  onClick={onGoogleSignIn} // Mock function
+                >
+                  <FaGoogle className="me-3" />
+                  Sign in with Google
                 </Button>
 
                 {/* Don't have an account text */}
