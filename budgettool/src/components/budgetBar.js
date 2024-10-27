@@ -22,7 +22,7 @@ const BudgetBar = () => {
       >
         <Container fluid>
           <Navbar.Brand className="text-light me-5" href="#home">
-            Budget Tool
+            EduFinance
           </Navbar.Brand>
 
           <Button
@@ -39,53 +39,46 @@ const BudgetBar = () => {
           </Button>
 
           <Navbar.Collapse id="navbar-nav">
-            <Nav className="me-auto">
+            <Nav className="w-100 d-flex justify-content-between align-items-center">
+              {/* Add Investment with extra margin */}
               <Nav.Link
-                href="#why"
-                className="text-light me-5"
+                href="#addInvestment"
+                className="text-light ms-3" // Added left margin
                 onClick={handleToggleClick}
               >
-                Income Sources
+                Add Investment
               </Nav.Link>
+
+              {/* Budgeting centered */}
               <Nav.Link
-                href="#features"
-                className="text-light me-5"
+                href="#budgeting"
+                className="text-light mx-auto"
                 onClick={handleToggleClick}
               >
                 Budgeting
               </Nav.Link>
-              <Nav.Link
-                href="#updates"
-                className="text-light me-5"
-                onClick={handleToggleClick}
-              >
-                Savings
-              </Nav.Link>
-            </Nav>
 
-            {/* Conditional buttons */}
-            <div className="d-flex">
-              <Link to="/signIn">
-                <Button variant="outline-light" className="me-2">
-                  Login
-                </Button>
-              </Link>
-              {isAuthenticated ? (
-                <Button
-                  variant="outline-light"
-                  className="ms-2"
-                  onClick={() => logout({ returnTo: window.location.origin })}
-                >
-                  Sign Out
-                </Button>
-              ) : (
-                <Link to="/register">
-                  <Button variant="outline-light" className="ms-2">
-                    Register
+              {/* Conditional buttons aligned to the right */}
+              <div className="d-flex">
+                {isAuthenticated ? (
+                  <Button
+                    variant="outline-light"
+                    className="ms-2"
+                    onClick={() =>
+                      logout({ returnTo: window.location.origin })
+                    }
+                  >
+                    Sign Out
                   </Button>
-                </Link>
-              )}
-            </div>
+                ) : (
+                  <Link to="/register">
+                    <Button variant="outline-light" className="ms-2">
+                      Register
+                    </Button>
+                  </Link>
+                )}
+              </div>
+            </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
