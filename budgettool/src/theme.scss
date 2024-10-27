@@ -1,0 +1,41 @@
+@import "../node_modules/@fortawesome/fontawesome-free/css/all.min.css";
+
+// Import fonts and FontAwesome
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import '~@fortawesome/fontawesome-free/css/all.min.css';
+
+// Override Bootstrap theme colors and fonts
+$primary: #0f9e48;
+$secondary: #669ebb;
+$tertiary: #000000;
+$primaryAccent: #d9d9d9;
+$font-family-base: 'Poppins', sans-serif;
+
+// Root styles to prevent horizontal scrolling
+:root {
+  --primary: #0f9e48;
+  --secondary: #669ebb;
+  --tertiary: #000000;
+  --primary-accent: #d9d9d9;
+
+  /* Ensure no horizontal scroll */
+  margin: 0;
+  padding: 0;
+}
+
+// Custom styles
+.primaryAccent {
+  background-color: $primaryAccent;
+}
+
+// Apply general layout fixes
+body {
+  overflow-x: hidden;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  font-family: 'Poppins', sans-serif; /* Set the font globally */
+}
+
+// Import Bootstrap styles
+@import '~bootstrap/scss/bootstrap';
