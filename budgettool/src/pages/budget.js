@@ -1,7 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Button, Form, Col, Row, Container } from "react-bootstrap";
+import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import NavigationBar from "../components/budgetBar";
 import { FaTrash } from "react-icons/fa";
+
+const COLORS = [
+  "#0088FE",
+  "#00C49F",
+  "#FFBB28",
+  "#FF8042",
+  "#FF6666",
+  "#8884D8",
+];
 
 const Budget = () => {
   const [incomeItems, setIncomeItems] = useState([
@@ -10,11 +20,13 @@ const Budget = () => {
   ]);
 
   const [givingItems, setGivingItems] = useState([
-    { id: 1, label: "Church", dollars: 0, cents: 0, editable: false },
-    { id: 2, label: "Charity", dollars: 0, cents: 0, editable: false },
+    { id: 1, label: "Church", dollars: 11, cents: 0, editable: false },
+    { id: 2, label: "Charity", dollars: 19, cents: 0, editable: false },
   ]);
 
-  // Calculate total income and total giving
+  const [incomeChartData, setIncomeChartData] = useState([]);
+  const [givingChartData, setGivingChartData] = useState([]);
+
   const calculateTotal = (items) => {
     return items.reduce(
       (total, item) => total + item.dollars + item.cents / 100,
@@ -26,6 +38,21 @@ const Budget = () => {
   const totalGiving = calculateTotal(givingItems);
   const leftToBudget = totalIncome - totalGiving;
 
+  const generateChartData = (items) => {
+    return items.map((item) => ({
+      name: item.label,
+      value: item.dollars + item.cents / 100,
+    }));
+  };
+
+  const handleGenerateIncomeChart = () => {
+    setIncomeChartData(generateChartData(incomeItems));
+  };
+
+  const handleGenerateGivingChart = () => {
+    setGivingChartData(generateChartData(givingItems));
+  };
+
   return (
     <>
       <NavigationBar />
@@ -36,7 +63,65 @@ const Budget = () => {
           setIncomeItems={setIncomeItems}
           givingItems={givingItems}
           setGivingItems={setGivingItems}
+          onGenerateIncomeChart={handleGenerateIncomeChart}
+          onGenerateGivingChart={handleGenerateGivingChart}
         />
+        <Row>
+          <Col md={6} className="p-3">
+            {incomeChartData.length > 0 && (
+              <div className="bg-white shadow-sm p-4 rounded">
+                <h4>Income Distribution</h4>
+                <PieChart width={300} height={300}>
+                  <Pie
+                    data={incomeChartData}
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={100}
+                    fill="#8884d8"
+                    label
+                  >
+                    {incomeChartData.map((_, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[index % COLORS.length]}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                </PieChart>
+              </div>
+            )}
+          </Col>
+          <Col md={6} className="p-3">
+            {givingChartData.length > 0 && (
+              <div className="bg-white shadow-sm p-4 rounded">
+                <h4>Giving Distribution</h4>
+                <PieChart width={300} height={300}>
+                  <Pie
+                    data={givingChartData}
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={100}
+                    fill="#8884d8"
+                    label
+                  >
+                    {givingChartData.map((_, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[index % COLORS.length]}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                </PieChart>
+              </div>
+            )}
+          </Col>
+        </Row>
       </div>
     </>
   );
@@ -58,27 +143,33 @@ const BudgetSections = ({
   setIncomeItems,
   givingItems,
   setGivingItems,
+  onGenerateIncomeChart,
+  onGenerateGivingChart,
 }) => {
   const addIncomeItem = () => {
-    const newItem = {
-      id: incomeItems.length + 1,
-      label: `Paycheck ${incomeItems.length + 1}`,
-      dollars: 0,
-      cents: 0,
-      editable: true,
-    };
-    setIncomeItems([...incomeItems, newItem]);
+    if (incomeItems.length < 6) {
+      const newItem = {
+        id: incomeItems.length + 1,
+        label: `Paycheck ${incomeItems.length + 1}`,
+        dollars: 0,
+        cents: 0,
+        editable: true,
+      };
+      setIncomeItems([...incomeItems, newItem]);
+    }
   };
 
   const addGivingItem = () => {
-    const newItem = {
-      id: givingItems.length + 1,
-      label: `Item ${givingItems.length + 1}`,
-      dollars: 0,
-      cents: 0,
-      editable: true,
-    };
-    setGivingItems([...givingItems, newItem]);
+    if (givingItems.length < 6) {
+      const newItem = {
+        id: givingItems.length + 1,
+        label: `Item ${givingItems.length + 1}`,
+        dollars: 0,
+        cents: 0,
+        editable: true,
+      };
+      setGivingItems([...givingItems, newItem]);
+    }
   };
 
   const deleteItem = (id, isIncome) => {
@@ -142,8 +233,17 @@ const BudgetSections = ({
               />
             ))}
             <div className="d-flex justify-content-end mt-3">
-              <Button variant="link" onClick={addIncomeItem}>
+              <Button
+                variant="link"
+                onClick={addIncomeItem}
+                disabled={incomeItems.length >= 6}
+              >
                 Add Income
+              </Button>
+            </div>
+            <div className="d-flex justify-content-center mt-3">
+              <Button variant="primary" onClick={onGenerateIncomeChart}>
+                Generate Pie Chart
               </Button>
             </div>
           </div>
@@ -167,8 +267,17 @@ const BudgetSections = ({
               />
             ))}
             <div className="d-flex justify-content-end mt-3">
-              <Button variant="link" onClick={addGivingItem}>
+              <Button
+                variant="link"
+                onClick={addGivingItem}
+                disabled={givingItems.length >= 6}
+              >
                 Add Item
+              </Button>
+            </div>
+            <div className="d-flex justify-content-center mt-3">
+              <Button variant="primary" onClick={onGenerateGivingChart}>
+                Generate Pie Chart
               </Button>
             </div>
           </div>
@@ -196,13 +305,11 @@ const BudgetItem = ({
 
   const handleCentsChange = (e) => {
     let newCents = Math.max(0, parseInt(e.target.value) || 0);
-
     if (newCents >= 100) {
       const extraDollars = Math.floor(newCents / 100);
       setDollars(dollars + extraDollars);
       newCents = newCents % 100;
     }
-
     setCents(newCents);
   };
 
